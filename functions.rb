@@ -1,5 +1,4 @@
-def rest_board
-  empty = '   '
+def rest_board(empty)
   Array.new(3) { Array.new(3, empty) }
 end
 
@@ -9,7 +8,7 @@ def build_board(game_board)
   game_board.each_with_index do |row, i|
     construct_row(row, wall)
     # No floor after the 3nd row
-    typewriter(floor,0.01) if i < game_board.length - 1
+    typewriter(floor, 0.01) if i < game_board.length - 1
   end
 end
 
@@ -50,7 +49,54 @@ end
 def typewriter(string, speed)
   string.chars.each do |char|
     print char
-    sleep speed 
+    sleep speed
   end
   puts ''
+end
+
+def player_turn(game_board, empty, symbol)
+  puts "\e[31mX\e[0m player's turn:"
+  available_cells = []
+  game_board.each_with_index do |row, i|
+    row.each_with_index do |cell, j|
+      next unless cell === empty
+
+      cell_name = case [i, j]
+                  when [0, 0]
+                    '1. Top Left'
+                  when [0, 1]
+                    '2. Top Middle'
+                  when [0, 2]
+                    '3. Top Right'
+                  when [1, 0]
+                    '4. Middle Left'
+                  when [1, 1]
+                    '5. Center'
+                  when [1, 2]
+                    '6. Middle Right'
+                  when [2, 0]
+                    '7. Bottom Left'
+                  when [2, 1]
+                    '8. Bottom Middle'
+                  when [2, 2]
+                    '9. Bottom Right'
+                  end
+      puts cell_name
+      available_cells << [i, j]
+    end
+  end
+
+  chosen_cell = nil
+  until chosen_cell
+    print 'Choose an available cell (number): '
+    input = gets.chomp.to_i
+    if input.between?(1, available_cells.length)
+      chosen_cell = available_cells[input - 1]
+    else
+      puts 'Invalid choice. Please try again.'
+    end
+  end
+
+  game_board[chosen_cell[0]][chosen_cell[1]] = symbol
+  system('clear')
 end
