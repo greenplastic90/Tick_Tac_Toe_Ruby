@@ -8,7 +8,8 @@ def build_board(game_board)
   wall = '|'
   game_board.each_with_index do |row, i|
     construct_row(row, wall)
-    puts floor if i < game_board.length - 1
+    # No floor after the 3nd row
+    typewriter(floor,0.01) if i < game_board.length - 1
   end
 end
 
@@ -16,9 +17,10 @@ def construct_row(row, wall)
   full_row = ''
   row.each_with_index do |item, i|
     full_row += item + wall if i < row.length - 1
+    # No wall after 3rd item
     full_row += item unless i < row.length - 1
   end
-  puts full_row
+  typewriter(full_row, 0.01)
 end
 
 def check_win(game_board)
@@ -43,4 +45,12 @@ def check_win(game_board)
 
   # No win found
   false
+end
+
+def typewriter(string, speed)
+  string.chars.each do |char|
+    print char
+    sleep speed 
+  end
+  puts ''
 end
