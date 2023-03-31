@@ -5,16 +5,17 @@ class Game
   attr_reader :board
 
   def initialize(player_one, player_two)
-    @greeting = "\e[32mTic\e[0m \e[33mTac\e[0m \e[31mToe\e[0m"
+    @greeting = "#{colorize('Tic', :green)} #{colorize('Tac', :yellow)} #{colorize('Toe', :red)}"
     @empty = ' ' * 3
-    @floor = '---+---+---'
-    @wall = '|'
+    @floor = colorize('---+---+---', :cyan)
+    @wall = colorize('|', :magenta)
     @board = rest_board
     @players = { player_one: player_one, player_two: player_two }
   end
 
   def start_game
     system('clear')
+
     build_board
 
     is_player_one_turn = true
