@@ -6,18 +6,18 @@ class Player
 
   def initialize(name, symbol)
     @name = valid_name?(name) ? name : get_valid_name
-    @symbol = valid_symbol?(symbol) ? symbol : get_valid_symbol
+    @symbol = valid_symbol?(symbol) ? "\e[31m #{symbol} \e[0m" : get_valid_symbol
   end
 
   def valid_name?(name)
-    name.length <= 8 && !name.strip.empty? && !name.match?(/\s/)
+    name.length <= 10 && !name.strip.empty? && !name.match?(/\s/)
   end
 
   def get_valid_name
-    puts 'Error: name should be a single word and not longer than 8 characters.'
+    puts 'Error: name should be a single word and not longer than 10 characters.'
     new_name = gets.chomp
     until valid_name?(new_name)
-      puts 'Error: name should be a single word and not longer than 8 characters.'
+      puts 'Error: name should be a single word and not longer than 10 characters.'
       new_name = gets.chomp
     end
     new_name
@@ -37,7 +37,7 @@ class Player
     "\e[31m #{new_symbol} \e[0m"
   end
 
-  def player_turn(game_board, empty)
+  def choice(game_board, empty)
     puts "\e[31mX\e[0m player's turn:"
     available_cells = []
     game_board.each_with_index do |row, i|

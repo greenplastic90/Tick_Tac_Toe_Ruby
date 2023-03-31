@@ -1,4 +1,5 @@
 require_relative 'helper'
+
 class Game
   include Helper
   attr_reader :board
@@ -9,17 +10,33 @@ class Game
     @floor = '---+---+---'
     @wall = '|'
     @board = rest_board
-    @players = { player_two: player_one, player_two: player_two }
+    @players = { player_one: player_one, player_two: player_two }
   end
 
   def start_game
+    system('clear')
     build_board
-    # while !check_win
-    # end
+
+    is_player_one_turn = true
+    # ! check for tie
+    until check_win?
+      player = is_player_one_turn ? @players[:player_one] : @players[:player_two]
+      choice = player.choice(@board, @empty)
+      # ! update board with choice
+      choice
+      update_board(choice)
+      build_board
+
+      is_player_one_turn = !is_player_one_turn
+    end
   end
 
   def rest_board
     Array.new(3) { Array.new(3, @empty) }
+  end
+
+  def update_board(choice)
+    @board[choice[:cell][0]][choice[:cell][1]] = choice[:symbol]
   end
 
   def build_board
@@ -40,7 +57,7 @@ class Game
     typewriter(full_row, 0.01)
   end
 
-  def check_win
+  def check_win?
     # Check rows for a win
     @board.each do |row|
       return true if row.all? { |cell| cell == row[0] && !cell.strip.empty? }
