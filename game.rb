@@ -101,8 +101,7 @@ class Game
         puts 'Invalid choice. Please try again.'
       end
     end
-
-    game_board[chosen_cell[0]][chosen_cell[1]] = symbol
     system('clear')
+    game_board[chosen_cell[0]][chosen_cell[1]] = symbol
   end
 end
