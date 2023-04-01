@@ -19,8 +19,8 @@ class Game
     build_board
 
     is_player_one_turn = true
-    game_result = check_win_or_tie?
-    until %i[win tie].include?(game_result)
+
+    until %i[win tie].include?(game_status)
       player = is_player_one_turn ? @players[:player_one] : @players[:player_two]
       choice = player.choice(@board, @empty)
       update_board(choice)
@@ -28,10 +28,10 @@ class Game
       build_board
 
       is_player_one_turn = !is_player_one_turn
-      game_result = check_win_or_tie?
+
     end
 
-    case game_result
+    case game_status
     when :win
       winner = is_player_one_turn ? 'Player Two' : 'Player One'
       puts "#{winner} wins!"
@@ -68,7 +68,7 @@ class Game
     typewriter(full_row, 0.01)
   end
 
-  def check_win_or_tie?
+  def game_status
     # Check rows for a win
     @board.each do |row|
       return :win if row.all? { |cell| cell == row[0] && !cell.strip.empty? }
