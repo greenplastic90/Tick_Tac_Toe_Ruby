@@ -4,9 +4,10 @@ class Player
   include Helper
   attr_reader :name, :symbol
 
-  def initialize(name, symbol)
+  def initialize(name, color, symbol)
     @name = valid_name?(name) ? name : get_valid_name
-    @symbol = valid_symbol?(symbol) ? colorize(" #{symbol} ", :red) : get_valid_symbol
+    @color = color
+    @symbol = valid_symbol?(symbol) ? colorize(" #{symbol} ", @color) : get_valid_symbol
   end
 
   def valid_name?(name)
@@ -34,11 +35,12 @@ class Player
       puts 'Error: symbol should be a single character from the alphabet.'
       new_symbol = gets.chomp
     end
-    colorize(" #{new_symbol} ", :red)
+    colorize(" #{new_symbol} ", @color)
   end
 
   def choice(game_board, empty)
-    puts "#{colorize(symbol, :red)} player's turn:"
+    symbol_no_spaces = @symbol.gsub(/\s(?=[a-zA-Z])/, '').gsub(/(?<=[a-zA-Z])\s/, '')
+    puts "#{colorize(symbol_no_spaces, @color)} #{@name}'s turn:"
     available_cells = []
     # Create Array of available cells
     game_board.each_with_index do |row, i|
@@ -71,12 +73,13 @@ class Player
                     'Bottom Right'
                   end
       list_number = index + 1
-      puts "#{colorize(list_number.to_s, :yellow)}. #{cell_name}"
+      puts "#{colorize(list_number.to_s, @color)}. #{cell_name}"
+      sleep 0.1
     end
 
     chosen_cell = nil
     until chosen_cell
-      print "Choose an available cell (#{colorize('number', :yellow)}): "
+      print "Choose an available cell (#{colorize('number', @color)}): "
       input = gets.chomp.to_i
       if input.between?(1, available_cells.length)
         chosen_cell = available_cells[input - 1]
@@ -84,7 +87,7 @@ class Player
         puts 'Invalid choice. Please try again.'
       end
     end
-    system('clear')
+
     { cell: chosen_cell, symbol: @symbol }
   end
 end
