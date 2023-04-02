@@ -8,3 +8,5 @@ game = Game.new(player_one, player_two)
 game.start_game
 
 # ! Score board
+
+# ? Players chooseing names and Symbols

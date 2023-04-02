@@ -2,12 +2,14 @@ require_relative 'helper'
 
 class Player
   include Helper
-  attr_reader :name, :symbol
+  attr_reader :name, :symbol, :color
+  attr_accessor :score
 
   def initialize(name, color, symbol)
     @name = valid_name?(name) ? name : get_valid_name
     @color = color
     @symbol = valid_symbol?(symbol) ? colorize(" #{symbol} ", @color) : get_valid_symbol
+    @score = 0
   end
 
   def valid_name?(name)
@@ -41,6 +43,7 @@ class Player
   def choice(game_board, empty)
     symbol_no_spaces = @symbol.gsub(/\s(?=[a-zA-Z])/, '').gsub(/(?<=[a-zA-Z])\s/, '')
     puts "#{colorize(symbol_no_spaces, @color)} #{@name}'s turn:"
+    empty_line
     available_cells = []
     # Create Array of available cells
     game_board.each_with_index do |row, i|
@@ -79,7 +82,9 @@ class Player
 
     chosen_cell = nil
     until chosen_cell
+      empty_line
       print "Choose an available cell (#{colorize('number', @color)}): "
+
       input = gets.chomp.to_i
       if input.between?(1, available_cells.length)
         chosen_cell = available_cells[input - 1]

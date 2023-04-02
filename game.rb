@@ -5,7 +5,7 @@ class Game
   attr_reader :board
 
   def initialize(player_one, player_two)
-    @greeting = "#{colorize('Tic', :green)} #{colorize('Tac', :yellow)} #{colorize('Toe', :red)}"
+    @title = "#{colorize('Tic', :green)} #{colorize('Tac', :yellow)} #{colorize('Toe', :red)}"
     @empty = ' ' * 3
     @floor = colorize('---+---+---', :magenta)
     @wall = colorize('|', :magenta)
@@ -15,7 +15,7 @@ class Game
 
   def start_game
     system('clear')
-    typewriter(@greeting, 0.1)
+    typewriter(@title, 0.1)
     build_board
 
     is_player_one_turn = true
@@ -26,7 +26,6 @@ class Game
       update_board(choice)
       system('clear')
       build_board
-
       is_player_one_turn = !is_player_one_turn
 
     end
@@ -40,6 +39,15 @@ class Game
     end
   end
 
+  def score_board
+    space = @players[:player_one].name.length
+    puts "#{@players[:player_one].name} #{@players[:player_two].name}"
+    puts "#{colorize(@players[:player_one].score,
+                     @players[:player_one].color)}#{' ' * space}#{colorize(@players[:player_two].score,
+                                                                           @players[:player_two].color)}"
+    empty_line
+  end
+
   def rest_board
     Array.new(3) { Array.new(3, @empty) }
   end
@@ -50,12 +58,15 @@ class Game
 
   def build_board
     system('clear')
-    puts @greeting
+    puts @title
+    empty_line
+    score_board
     @board.each_with_index do |row, i|
       construct_row(row)
       # No floor after the 3nd row
       typewriter(@floor, 0.01) if i < @board.length - 1
     end
+    empty_line
   end
 
   def construct_row(row)

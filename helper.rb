@@ -7,6 +7,10 @@ module Helper
     puts ''
   end
 
+  def empty_line
+    puts ''
+  end
+
   def colorize(text, color)
     color_codes = {
       black: 30,
