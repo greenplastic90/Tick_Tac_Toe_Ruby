@@ -15,28 +15,31 @@ class Game
 
   def start_game
     system('clear')
-    typewriter(@title, 0.1)
+    typewriter(@title, 0.01)
+
     build_board
 
     is_player_one_turn = true
 
     until %i[win tie].include?(game_status)
+
       player = is_player_one_turn ? @players[:player_one] : @players[:player_two]
       choice = player.choice(@board, @empty)
       update_board(choice)
       system('clear')
       build_board
       is_player_one_turn = !is_player_one_turn
-
     end
-
+    is_player_one_turn = !is_player_one_turn
     case game_status
     when :win
-      winner = is_player_one_turn ? 'Player Two' : 'Player One'
-      puts "#{winner} wins!"
+      winner = is_player_one_turn ? @players[:player_one] : @players[:player_two]
+      winner.score += 1
+      puts "#{colorize(winner.name, winner.color)} wins!"
     when :tie
       puts "It's a tie!"
     end
+    build_board(false)
   end
 
   def score_board
@@ -56,27 +59,35 @@ class Game
     @board[choice[:cell][0]][choice[:cell][1]] = choice[:symbol]
   end
 
-  def build_board
+  def build_board(use_typewriter = true)
     system('clear')
     puts @title
     empty_line
     score_board
     @board.each_with_index do |row, i|
-      construct_row(row)
+      construct_row(row, use_typewriter)
       # No floor after the 3nd row
-      typewriter(@floor, 0.01) if i < @board.length - 1
+      if use_typewriter
+        typewriter(@floor, 0.01) if i < @board.length - 1
+      elsif i < @board.length - 1
+        puts @floor
+      end
     end
     empty_line
   end
 
-  def construct_row(row)
+  def construct_row(row, use_typewriter)
     full_row = ''
     row.each_with_index do |item, i|
       full_row += item + @wall if i < row.length - 1
       # No wall after 3rd item
       full_row += item unless i < row.length - 1
     end
-    typewriter(full_row, 0.01)
+    if use_typewriter
+      typewriter(full_row, 0.01)
+    else
+      puts full_row
+    end
   end
 
   def game_status
