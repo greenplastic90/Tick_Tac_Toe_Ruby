@@ -4,6 +4,7 @@ require_relative 'player'
 system('clear')
 # puts 'Welcome to Tic Tac Toe!'
 puts Game.title
+puts ''
 print 'Player One, enter your name: '
 player_one_name = gets.chomp
 print 'Player Two, enter your name: '

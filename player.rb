@@ -13,13 +13,13 @@ class Player
   end
 
   def valid_name?(name)
-    name.length <= 10 && !name.strip.empty? && !name.match?(/\s/)
+    !name.strip.empty? && !name.match?(/\s/)
   end
 
   def get_valid_name(name)
     try_again = 'Re-enter player name:'
     invalid_name_prompt = "#{colorize('Invalid name',
-                                      :red)}: #{name}, name should be a single word and not longer than 10 characters."
+                                      :red)}: #{name}, name should be a single word."
     puts invalid_name_prompt
     print try_again
     new_name = gets.chomp
