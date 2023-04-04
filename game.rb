@@ -22,7 +22,6 @@ class Game
     is_player_one_turn = true
 
     until %i[win tie].include?(game_status)
-
       player = is_player_one_turn ? @players[:player_one] : @players[:player_two]
       choice = player.choice(@board, @empty)
       update_board(choice)
@@ -30,7 +29,11 @@ class Game
       build_board
       is_player_one_turn = !is_player_one_turn
     end
+
     is_player_one_turn = !is_player_one_turn
+
+    build_board(false)
+
     case game_status
     when :win
       winner = is_player_one_turn ? @players[:player_one] : @players[:player_two]
@@ -39,7 +42,28 @@ class Game
     when :tie
       puts "It's a tie!"
     end
-    build_board(false)
+    # ! have score update before game restarts
+
+    empty_line
+
+    # Ask the players if they want to play again
+    restart_prompt = "Do you want to play again? (#{colorize('1', :bright_green)}. Yes, #{colorize('2', :red)}. No): "
+    print restart_prompt
+    choice = gets.chomp.to_i
+    until [1, 2].include?(choice)
+      puts "Invalid choice. Please enter #{colorize('1', :bright_green)} for Yes or #{colorize('2', :red)} for No."
+      print restart_prompt
+      choice = gets.chomp.to_i
+    end
+
+    if choice == 1
+      # Reset the game and start over
+      @board = rest_board
+      start_game
+    else
+      # End the game
+      puts 'Thanks for playing!'
+    end
   end
 
   def score_board
