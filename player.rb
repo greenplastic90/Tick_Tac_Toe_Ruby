@@ -6,7 +6,7 @@ class Player
   attr_accessor :score
 
   def initialize(name, color, symbol)
-    @name = valid_name?(name) ? name : get_valid_name
+    @name = valid_name?(name) ? name : get_valid_name(name)
     @color = color
     @symbol = valid_symbol?(symbol) ? colorize(" #{symbol} ", @color) : get_valid_symbol
     @score = 0
@@ -16,11 +16,15 @@ class Player
     name.length <= 10 && !name.strip.empty? && !name.match?(/\s/)
   end
 
-  def get_valid_name
-    puts 'Error: name should be a single word and not longer than 10 characters.'
+  def get_valid_name(name)
+    error_prompt = "#{colorize('Error', :red)}: name should be a single word and not longer than 10 characters."
+    invalid_name_prompt = "#{colorize('Invalid name', :red)}: #{name}"
+    puts invalid_name_prompt
+    puts error_prompt
     new_name = gets.chomp
     until valid_name?(new_name)
-      puts 'Error: name should be a single word and not longer than 10 characters.'
+      puts invalid_name_prompt
+      puts error_prompt
       new_name = gets.chomp
     end
     new_name

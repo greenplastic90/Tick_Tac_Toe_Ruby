@@ -4,13 +4,17 @@ class Game
   include Helper
   attr_reader :board
 
-  def initialize(player_one, player_two)
-    @title = "#{colorize('Tic', :green)} #{colorize('Tac', :yellow)} #{colorize('Toe', :red)}"
+  def initialize(player_one, player_two, title: '')
+    @title = title.empty? ? "#{colorize('Tic', :yellow)} #{colorize('Tac', :magenta)} #{colorize('Toe', :cyan)}" : title
     @empty = ' ' * 3
     @floor = colorize('---+---+---', :magenta)
     @wall = colorize('|', :magenta)
     @board = rest_board
     @players = { player_one: player_one, player_two: player_two }
+  end
+
+  def self.title(title = '')
+    new(nil, nil, title: title).instance_variable_get(:@title)
   end
 
   def start_game
@@ -32,7 +36,11 @@ class Game
 
     is_player_one_turn = !is_player_one_turn
     winner = is_player_one_turn ? @players[:player_one] : @players[:player_two]
-    winner.score += 1
+    case game_status
+    when :win
+      winner.score += 1
+    end
+
     build_board(false)
 
     case game_status
