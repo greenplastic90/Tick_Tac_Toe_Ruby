@@ -31,18 +31,16 @@ class Game
     end
 
     is_player_one_turn = !is_player_one_turn
-
+    winner = is_player_one_turn ? @players[:player_one] : @players[:player_two]
+    winner.score += 1
     build_board(false)
 
     case game_status
     when :win
-      winner = is_player_one_turn ? @players[:player_one] : @players[:player_two]
-      winner.score += 1
       puts "#{colorize(winner.name, winner.color)} wins!"
     when :tie
       puts "It's a tie!"
     end
-    # ! have score update before game restarts
 
     empty_line
 
