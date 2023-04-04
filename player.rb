@@ -17,14 +17,15 @@ class Player
   end
 
   def get_valid_name(name)
-    error_prompt = "#{colorize('Error', :red)}: name should be a single word and not longer than 10 characters."
-    invalid_name_prompt = "#{colorize('Invalid name', :red)}: #{name}"
+    try_again = 'Re-enter player name:'
+    invalid_name_prompt = "#{colorize('Invalid name',
+                                      :red)}: #{name}, name should be a single word and not longer than 10 characters."
     puts invalid_name_prompt
-    puts error_prompt
+    print try_again
     new_name = gets.chomp
     until valid_name?(new_name)
       puts invalid_name_prompt
-      puts error_prompt
+      print try_again
       new_name = gets.chomp
     end
     new_name
